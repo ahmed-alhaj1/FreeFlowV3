@@ -23,6 +23,8 @@ class User(db.Model):
 		self.email = email
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
+	def get_password(self):
+		return '{}'.format(self.password)
 #def rep_user_info():
 	#user = db.query.filter_by(username='ahmed')
 
@@ -37,7 +39,7 @@ class FileContents(db.Model):
 	def __init__(data = None, filename = None , user_id= None):
 		self.data = data
 		self.filename = filename
-	"""	
+	"""
 
 def prepare_info(  username, password , first_name, last_name,  email):
 	Id = make_id()
@@ -45,7 +47,7 @@ def prepare_info(  username, password , first_name, last_name,  email):
 	dirname = 'uploads/'+username[0:3]+ str(date.year ) +Id[0:4]
 	make_dir(dirname)
 	return User( username, password, first_name, last_name,  email,dirname )
-	
+
 
 def make_id():
 	return str(uuid.uuid4().fields[-1])[:5]

@@ -1,4 +1,4 @@
-import os 
+import os
 from flask import Flask, render_template, flash, redirect, url_for, abort, g, session, request
 from config import Config
 from flask_script import Manager
@@ -39,19 +39,30 @@ def login():
 		return render_template('login.html')
 	else:
 		return "Welcome to FreeFlow"
-	
+
 
 @app.route('/login')
 def load_login():
 	print('here0')
 	if request.method == 'GET':
-		if request.args['password'] == 'password' and request.args['username'] =='ahmed':
-			username = request.args['username']
-			print('here1')
-##			session['logged_in']
+		username = request.args['username']
+		owner = User.query.filter_by(username=username).first()
+		if owner != None:
+			if owner.get_password() == request.args['password']:
+				return render_template('logged.html', name = username)
+			else:
+				flash('wrong password')
+			return render_template('logged.html', name = username)
 		else:
-			flash('wrong password')
-	return render_template('logged.html', name = username)
+			return None
+
+# 		if request.args['password'] == 'password' and request.args['username'] =='ahmed':
+# 			username = request.args['username']
+# 			print('here1')
+# ##			session['logged_in']
+# 		else:
+# 			flash('wrong password')
+# 	return render_template('logged.html', name = username)
 
 @app.route('/register')
 def register():
@@ -68,7 +79,7 @@ def create_user():
 		db.session.add(user)
 		db.session.commit()
 		return 'Hello ' + request.form['FirstN'] + request.form['LastN']
-		
+
 
 @app.route('/uploads')
 def pre_upload():
@@ -77,15 +88,15 @@ def pre_upload():
 @app.route('/upload_file', methods=['POST','GET'])
 def upload_file():
 	from models import FileContents, User
-	
+
 	owner = User.query.filter_by(username='sofianx12').first()
-	print(owner.id , owner.username) 
+	print(owner.id , owner.username)
 
 	if request.method == 'POST':
 
-			
+
 		input_file = request.files['file']
-		print(owner.id , owner.username) 
+		print(owner.id , owner.username)
 
 		new_file = FileContents(data=input_file.read(), filename=input_file.filename, user_id =owner)
 		#db.create_all()
@@ -99,4 +110,3 @@ def upload_file():
 if __name__ == "__main__":
 	#app.run(debug=True, host= '0.0.0.0', port =4000)
 	manager.run()
-
