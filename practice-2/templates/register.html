@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="/static/css/login.css" type="text/css">
+{% block body %}
+{% if session['register'] %}
+<p>You're already regitered !</p>
+{% else %}
+
+
+<form action="/create_user" method="POST">
+        <div class="login">
+                <div class="login-screen">
+                        <div class="app-title">
+                                <h1>Register</h1>
+                        </div>
+
+                        <div class="Register-form">
+                                <div class="control-group">
+                                <input type="text" class="login-field" value="" placeholder="username" name="username">
+                                <label class="register-field-icon fui-user" for="regiter-name"></label>
+                                </div>
+				
+				<div class="control-group">
+                                <input type="text" class="login-field" value="" placeholder="First Name" name="FirstN">
+                                <label class="register-field-icon fui-user" for="regiter-name"></label>
+                                </div>
+	
+				 <div class="control-group">
+                                <input type="text" class="login-field" value="" placeholder="LastName" name="LastN">
+                                <label class="register-field-icon fui-user" for="regiter-name"></label>
+                                </div>
+	
+				<div class="control-group">
+                                <input type="text" class="login-field" value="" placeholder="Email" name="Email">
+                                <label class="register-field-icon fui-user" for="regiter-name"></label>
+                                </div>
+	
+                                <div class="control-group">
+                                <input type="password" class="login-field" value="" placeholder="password" name="password">
+                                <label class="login-field-icon fui-lock" for="login-pass"></label>
+                                </div>
+
+                <input type="submit" value="Log in" class="btn btn-primary btn-large btn-block" >
+                            <br>
+                        </div>
+                </div>
+        </div>
+</form>
+
+{% endif %}
+{% endblock %}
+
