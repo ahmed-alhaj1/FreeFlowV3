@@ -35,6 +35,7 @@ def create_db():
 
 @app.route('/')
 def login():
+	from models import User
 	if not session.get('logged_in'):
 		return render_template('login.html')
 	else:
@@ -44,6 +45,7 @@ def login():
 @app.route('/login')
 def load_login():
 	print('here0')
+	from models import User
 	if request.method == 'GET':
 		username = request.args['username']
 		owner = User.query.filter_by(username=username).first()
@@ -98,10 +100,10 @@ def upload_file():
 		input_file = request.files['file']
 		print(owner.id , owner.username)
 
-		new_file = FileContents(data=input_file.read(), filename=input_file.filename, user_id =owner)
+		new_file = FileContents(data=input_file.read(), filename=input_file.filename, user_id =owner.username)
 		#db.create_all()
 		db.session.add(new_file)
-		#db.session.commmit()
+		db.session.commit()
 		return (input_file.filename, "this file has been upload successfully")
 
 
