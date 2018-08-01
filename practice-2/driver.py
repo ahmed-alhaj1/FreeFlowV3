@@ -54,7 +54,7 @@ def load_login():
 				flash('wrong password')
 			return render_template('logged.html', name = username)
 		else:
-			return None
+			flash('wrong password')
 
 # 		if request.args['password'] == 'password' and request.args['username'] =='ahmed':
 # 			username = request.args['username']
