@@ -62,11 +62,11 @@ def load_login():
 	from models import User
 	if request.method == 'POST':
 		print("here0")
-		username = request.args['username']
+		username = request.form['username']
 		owner = User.query.filter_by(username=username).first()
 		if owner != None:
 			print("here1")
-			if owner.get_password() == request.args['password']:
+			if owner.get_password() == request.form['password']:
 				user = username
 				return render_template('upload.html', user = user)
 
