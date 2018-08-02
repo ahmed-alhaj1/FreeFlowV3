@@ -21,7 +21,7 @@ app.config.update(
 
 )
 
-user =''
+user = ''
 
 db = sql(app)
 Migrate(app, db)
@@ -57,22 +57,23 @@ def login():
 	return render_template('login.html')
 
 
-@app.route('/logged')
+@app.route('/logged',methods=['GET','POST'])
 def load_login():
 	from models import User
-	if request.method == 'GET':
+	if request.method == 'POST':
+		print("here0")
 		username = request.args['username']
 		owner = User.query.filter_by(username=username).first()
 		if owner != None:
+			print("here1")
 			if owner.get_password() == request.args['password']:
 				user = username
-				return render_template('logged.html', name = username)
+				return render_template('upload.html', user = user)
 
 			else:
-				flash('wrong password')
-			return render_template('logged.html', name = username)
+				return render_template('login.html', message = 'Wrong Password')
 		else:
-			flash('wrong password')
+			return render_template('login.html', message = 'Something happened try again')
 
 @app.route('/register')
 def register():
@@ -83,29 +84,31 @@ def register():
 def create_user():
 	from models import prepare_info , User
 	if request.method == 'POST':
-		user = User( request.form['username'], request.form['password'],request.form['FirstN'], request.form['LastN'],request.form['Email'] )
+		User = User( request.form['username'], request.form['password'],request.form['FirstN'], request.form['LastN'],request.form['Email'] )
 		db.create_all()
-		db.session.add(user)
+		db.session.add(User)
 		db.session.commit()
-		return render_template('logged.html', name = request.form['username'])
+		return render_template('upload.html', user = request.form['username'])
 
 
 @app.route('/uploads')
 def pre_upload():
-	return render_template('upload.html')
+	if user == '':
+		return render_template('login.html')
+	else:
+		return render_template('upload.html', user = user)
 
 @app.route('/upload_file', methods=['POST','GET'])
 def upload_file():
 	from models import FileContents, User
 
-	owner = User.query.filter_by(username='sofianx12').first()
-	print(owner.id , owner.username)
-
+		# owner = User.query.filter_by(username=user).first()
+		#print(owner.id , owner.username)
 	if request.method == 'POST':
 
 		input_file = request.files['file']
-		print(owner.id , owner.username)
-
+			#print(owner.id , owner.username)
+		owner = User.query.filter_by(user).first()
 		new_file = FileContents(data=input_file.read(), filename=input_file.filename, user_id =owner.username)
 		#db.create_all()
 		db.session.add(new_file)
