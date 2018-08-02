@@ -115,7 +115,9 @@ def upload_file():
 		db.session.commit()
 		return (input_file.filename, "this file has been upload successfully")
 
-
+@app.errorhandler(404)
+def page_not_found(e):
+ return render_template('404.html'), 404
 
 
 if __name__ == "__main__":
