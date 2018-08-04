@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, flash, redirect, url_for, abort, g, session, request
 from config import Config
 from flask_script import Manager
+from flask_pymongo import PyMongo
 from flask import session
 # from flask_dropzone import Dropzone
 #from flask_bcrypt import check_password_hash
@@ -23,7 +24,10 @@ app.config.update(
 
 )
 
-user = ''
+app.config['MONGO_DBNAME'] = 'symptomguru'
+app.config['MONGO_URI'] = 'mongodb://hacker1:PussyMoneyWeed@ds261429.mlab.com:61429/symptomguru'
+
+mongo = PyMongo(app)
 
 db = sql(app)
 Migrate(app, db)
@@ -143,6 +147,19 @@ def get_user_file(id):
 		pdf_file = open(completeName,"r")
 		return render_template('file_view.html',user = session["userName"], file = file)
 
+@app.route('/speech',methods=['POST','GET'])
+def speech_text():
+	if request.method == 'GET':
+		surgeries = mongo.db.surgeries
+		name = request.args['search']
+		surgery = surgeries.find_one({'name':str(name)})
+		print(surgery)
+		return render_template('Cards.html', data=surgery)
+
+@app.route('/Rec')
+def speechRec():
+	return render_template('index.html')
+
 @app.errorhandler(404)
 def page_not_found(e):
  return render_template('404.html'), 404
@@ -152,6 +169,4 @@ def page_not_found(e):
  return render_template('500.html'), 500
 
 if __name__ == "__main__":
-	#app.run(debug=True, host= '0.0.0.0', port =4000)
-	# manager.run()
-	app.run(debug=True)
+	app.run(ssl_context='adhoc')
