@@ -1,10 +1,9 @@
-<Link rel="stylesheet" href="/static/css/login.css" type="text/css">
-{% block body %}
-{% if session['logged_in'] %}
-<p>You're logged in already!</p>
-{% else %}
-
-
+{% extends "base.html" %}
+{% block title %}FreeFlow - Home{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/login.css" type="text/css">
+{% endblock %}
+{% block content %}
 <form action="/options" method="GET">
 	<div class="login">
 		<div class="login-screen">
@@ -13,12 +12,11 @@
 			</div>
       <input type="submit" name="submit" value="register">
       <br>
-      <br
+      <br>
       <input type="submit" name="submit" value="login">
 			</div>
 		</div>
 	</div>
 </form>
 
-{% endif %}
 {% endblock %}

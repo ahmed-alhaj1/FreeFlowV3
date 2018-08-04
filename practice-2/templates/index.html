@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+
+
+</head>
+
+<body>
+  <button id="start-record-btn" title="Start Recording">Start Recognition</button>
+
+  <button id="pause-record-btn" title="Pause Recording">Pause Recognition</button>
+    <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p>
+  <form action="/speech" method="GET">
+          <input type= "text" id="transcriptDiv" name= "search"/>
+           <input type = "submit" value = "submit" />
+         <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+         <script src="https://s3.amazonaws.com/speechtosign/Speech-To-Sign.js"></script>
+  </form>
+</body>
+
+</html>

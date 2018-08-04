@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block head %}
+{{ super() }}
+<Link rel="stylesheet" href="/static/css/login.css" type="text/css">
+<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+<script src="https://s3.amazonaws.com/speechtosign/app.js"></script>
+{% endblock %}
+{% block content %}
+{% if user %}
+<div class="container">
+    <div>
+      <!-- the PDF file must be on the same domain as this page -->
+  	  <!-- HERE IS WHERE THE FILE IS LOADED {{ url_for('static', filename ='pdf/journal.pdf')}}"></  -->
+      <iframe id="canvas" src="{{ url_for('static', filename = file.filename )}}"></iframe>
+    </div>
+  <script>
+  var input = document.getElementById("input");
+  var processor = document.getElementById("processor");
+  var output = document.getElementById("output");
+
+
+      window.addEventListener("message", function(event){
+        if (event.source != processor.contentWindow) return;
+
+        switch (event.data){
+          case "ready":
+            var xhr = new XMLHttpRequest;
+            xhr.open('GET', input.getAttribute("src"), true);
+            xhr.responseType = "arraybuffer";
+            xhr.onload = function(event) {
+              processor.contentWindow.postMessage(this.response, "*");
+            };
+            xhr.send();
+          break;
+
+          default:
+            output.textContent = event.data.replace(/\s+/g, " ");
+          break;
+        }
+      }, true);
+  </script>
+	<br>
+
+</div>
+{% endif %}
+{% endblock %}

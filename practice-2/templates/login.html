@@ -1,14 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block head %}
+  {{ super() }}
+  <Link rel="stylesheet" href="/static/css/login.css" type="text/css">
 
-
-<Link rel="stylesheet" href="/static/css/login.css" type="text/css">
-{% block body %}
-{% if session['logged_in'] %}
-<p>You're logged in already!</p>
-{% else %}
-
-
-
-<form action="/logged" method="POST">
+{% endblock %}
+{% block content %}
+<form action="/profile" method="POST">
 	<div class="login">
 		<div class="login-screen">
 			<div class="app-title">
@@ -39,5 +37,4 @@
 	</div>
 </form>
 
-{% endif %}
 {% endblock %}
