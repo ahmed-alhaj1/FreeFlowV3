@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}FreeFlow - Home{% endblock %}
+{% block head %}
+
+{% endblock %}
+{% block content %}
+<form action="/options" method="GET">
+	<div class="login">
+		<div class="login-screen">
+			<div class="app-title">
+				<h1>Login/Register</h1>
+			</div>
+      <input type="submit" name="submit" value="register">
+      <br>
+      <br>
+      <input type="submit" name="submit" value="login">
+			</div>
+		</div>
+	</div>
+</form>
+
+{% endblock %}

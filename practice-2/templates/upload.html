@@ -1,15 +1,27 @@
-<link rel="stylesheet" href="/static/css/login.css" type ="text/css" >
-{% block body %}
-{% if session['uploads'] %}
-<p> Welcom to FreeFlow tools </p>
-{% else %}
-
-
-		<form action = "/upload_file" method = "POST"
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block head %}
+{{ super() }}
+<Link rel="stylesheet" href="/static/css/login.css" type="text/css">
+{% endblock %}
+{% block content %}
+{% if user %}
+<div class="container">
+	<h1> Welcome {{ user }} </h1>
+	<br>
+	<br>
+	<p style="color:White;">Upload your files {{ user }}</p>
+		<ul>
+ 			{% for file in files %}
+ 			<li> <a href="/file/{{ file.id }}" >Your Pdfs {{ file }}</a></li>
+ 			{% endfor %}
+		</ul>
+	<form action = "/upload_file" method = "POST"
 			 enctype = "multipart/form-data">
 			 <input type = "file" name = "file" />
-			 <input type = "submit"/>
+			 <input class="btn-block" type = "submit"/>
 		</form>
 
+</div>
 {% endif %}
 {% endblock %}
