@@ -4,7 +4,7 @@ from config import Config
 from flask_script import Manager
 from flask_pymongo import PyMongo
 from flask import session
-#import api_v1
+import api_v1
 import json
 from bson import ObjectId
 #from flask_bcrypt import check_password_hash
@@ -162,11 +162,11 @@ def speech_text():
 		surgeries = mongo.db.surgeries
 		name = request.args['search']
 		surgery = surgeries.find_one({'name_lower':{'$regex': name}})
-		return render_template('index.html', card = JSONEncoder().encode(surgery))
+		return render_template('search.html', card = JSONEncoder().encode(surgery))
 
 @app.route('/Rec')
 def speechRec():
-	return render_template('index.html')
+	return render_template('search.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
