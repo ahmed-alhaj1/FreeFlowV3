@@ -2,8 +2,11 @@ import os
 from flask import Flask, render_template, flash, redirect, url_for, abort, g, session, request
 from config import Config
 from flask_script import Manager
+from flask_pymongo import PyMongo
 from flask import session
-# from flask_dropzone import Dropzone
+import api_v1
+import json
+from bson import ObjectId
 #from flask_bcrypt import check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy as sql
@@ -23,7 +26,10 @@ app.config.update(
 
 )
 
-user = ''
+app.config['MONGO_DBNAME'] = 'symptomguru'
+app.config['MONGO_URI'] = 'mongodb://FreeFlow:FreeFlow3@ds049104.mlab.com:49104/symptomguru'
+
+mongo = PyMongo(app)
 
 db = sql(app)
 Migrate(app, db)
@@ -143,9 +149,24 @@ def get_user_file(id):
 		pdf_file = open(completeName,"r")
 		return render_template('file_view.html',user = session["userName"], file = file)
 
-@app.route('speech/<word>')
-def speech_text(word):
 
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
+
+@app.route('/speech',methods=['POST','GET'])
+def speech_text():
+	if request.method == 'GET':
+		surgeries = mongo.db.surgeries
+		name = request.args['search']
+		surgery = surgeries.find_one({'name_lower':{'$regex': name}})
+		return render_template('search.html', card = JSONEncoder().encode(surgery))
+
+@app.route('/Rec')
+def speechRec():
+	return render_template('search.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -156,6 +177,4 @@ def page_not_found(e):
  return render_template('500.html'), 500
 
 if __name__ == "__main__":
-	#app.run(debug=True, host= '0.0.0.0', port =4000)
-	# manager.run()
-	app.run(debug=True)
+	app.run(ssl_context='adhoc')
