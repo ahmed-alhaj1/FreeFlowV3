@@ -4,7 +4,7 @@ from config import Config
 from flask_script import Manager
 from flask_pymongo import PyMongo
 from flask import session
-import api_v1
+#import api_v1
 import json
 from bson import ObjectId
 #from flask_bcrypt import check_password_hash
