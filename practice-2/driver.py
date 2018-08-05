@@ -4,7 +4,9 @@ from config import Config
 from flask_script import Manager
 from flask_pymongo import PyMongo
 from flask import session
-# from flask_dropzone import Dropzone
+import api_v1
+import json
+from bson import ObjectId
 #from flask_bcrypt import check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy as sql
@@ -25,7 +27,7 @@ app.config.update(
 )
 
 app.config['MONGO_DBNAME'] = 'symptomguru'
-app.config['MONGO_URI'] = 'mongodb://hacker1:PussyMoneyWeed@ds261429.mlab.com:61429/symptomguru'
+app.config['MONGO_URI'] = 'mongodb://FreeFlow:FreeFlow3@ds049104.mlab.com:49104/symptomguru'
 
 mongo = PyMongo(app)
 
@@ -147,14 +149,20 @@ def get_user_file(id):
 		pdf_file = open(completeName,"r")
 		return render_template('file_view.html',user = session["userName"], file = file)
 
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
+
 @app.route('/speech',methods=['POST','GET'])
 def speech_text():
 	if request.method == 'GET':
 		surgeries = mongo.db.surgeries
 		name = request.args['search']
-		surgery = surgeries.find_one({'name':str(name)})
-		print(surgery)
-		return render_template('Cards.html', data=surgery)
+		surgery = surgeries.find_one({'name_lower':{'$regex': name}})
+		return render_template('index.html', card = JSONEncoder().encode(surgery))
 
 @app.route('/Rec')
 def speechRec():
